@@ -148,7 +148,7 @@ total_salary(Name, AverageSalary) :-
 
 % 2.14
 takehome_salary(Name, Job_Title, Take_home_salary) :-
-    employee(_, Name, Job_Title, _, _, _, _, _, _, Annual_Salary, _, _, _, _),
+    employee(_, Name, Job_Title, _, _, _, _, _, _, _, _, _, _, _),
     total_salary(Name, TotalSalary),
     tax_percentage(TotalSalary, TaxPercent),
     TaxAmount is TotalSalary * (TaxPercent / 100),
@@ -162,8 +162,32 @@ tax_percentage(Salary, Tax) :-
     ;   Tax = 35 ). % <- else branch basically 
 	
 % 2.15
-total_years(Name, Hire_Date,Exit_Date) :-
-    employee(_, Name,_, _, _, _, _, _, Hire_Date, _, _, _, _, Exit_Date).
+% Helper predicate to extract the last two digits from an atom and convert to a full year
+last_two_digits_to_year(Atom, FullYear) :-
+    atom_chars(Atom, CharList),
+    reverse(CharList, Reversed),
+    last_two_chars(Reversed, ReversedLastTwo),
+    reverse(ReversedLastTwo, LastTwo),
+    atom_chars(LastTwoDigits, LastTwo),
+    atom_number(LastTwoDigits, Year),
+    (Year < 23 -> FullYear is 2000 + Year ; FullYear is 1900 + Year).
+
+% Helper predicate to get the first two characters from a list (which are the last two of the original atom)
+last_two_chars([X, Y | _], [X, Y]).
+
+total_years(Name, Years) :-
+    employee(_, Name, _, _, _, _, _, _, Hire_Date, _, _, _, _, Exit_Date),
+    last_two_digits_to_year(Hire_Date, HireYear),
+    (Exit_Date \= '' -> last_two_digits_to_year(Exit_Date, ExitYear) ; ExitYear = 2023), % Assuming 2023 is the current year
+    Years is ExitYear - HireYear.
+
+
+
+     
+
+
+
+
 
 	
 
