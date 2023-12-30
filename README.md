@@ -2,6 +2,8 @@
 
 ## Overview
 
+See project report for photos.
+
 This project involves a Prolog program designed to analyze employee data from a CSV file. The program translates the CSV data into Prolog knowledge base as FACTS, implements specific rules for data queries, and allows testing with various queries.
 
 ## Getting Started
